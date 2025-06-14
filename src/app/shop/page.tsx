@@ -9,13 +9,11 @@ export default async function ShopPage() {
      name,
      price,
      oldPrice,
-     rating,
-     reviews,
      "image": image.asset->url,
      "category": category->title,
      tag,
      isNew,
-     discount,
+     stockQuantity
    }
   `
   const products = await client.fetch(productQuery)

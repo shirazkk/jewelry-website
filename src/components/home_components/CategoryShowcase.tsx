@@ -17,7 +17,7 @@ const categoryQuery = `
     _id,
     title,
     "image": image.asset->url,
-    products
+    "products": count(*[_type == "product" && references(^._id)])
   }
 `
 

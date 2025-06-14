@@ -1,33 +1,29 @@
 import { notFound } from "next/navigation";
 import { client } from "@/sanity/lib/client";
-import type { Product } from "@/lib/products";
+import type { Product } from "@/types/products";
 import ProductDetailsClient from "@/components/ProductDetailsClient";
 import Link from "next/link";
 
 export default async function ProductPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: { slug: string };
 }) {
-  const slug = (await params).slug;
-  
   try {
     const dynamicProductPage = `
       *[_type == "product" && slug.current == $slug][0]{
         name,
         price,
         oldPrice,
-        rating,
-        reviews,
         "image": image.asset->url,
         "category": category->title, 
         tag,
         isNew,
-        discount,
+        stockQuantity,
         slug
       }
     `;
-    const product: Product = await client.fetch(dynamicProductPage, { slug });
+    const product: Product = await client.fetch(dynamicProductPage, { slug: params.slug });
 
     if (!product) {
       notFound();
@@ -42,11 +38,10 @@ export default async function ProductPage({
             price,
             oldPrice,
             "image": image.asset->url,
-            isNew,
-            discount
+            isNew
           }
         `,
-          { catTitle: product.category, slug }
+          { catTitle: product.category, slug: params.slug }
         )
       : [];
 

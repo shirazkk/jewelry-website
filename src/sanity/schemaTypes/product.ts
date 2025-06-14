@@ -6,6 +6,12 @@ export default defineType({
   type: 'document',
   fields: [
     defineField({
+      name: 'name',
+      title: 'Name',
+      type: 'string',
+      validation: (Rule: any) => Rule.required(),
+    }),
+    defineField({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
@@ -13,16 +19,18 @@ export default defineType({
         source: 'name',
         maxLength: 96,
       },
+      validation: (Rule: any) => Rule.required(),
     }),
     defineField({
-      name: 'name',
-      title: 'Product Name',
-      type: 'string',
+      name: 'description',
+      title: 'Description',
+      type: 'text',
     }),
     defineField({
       name: 'price',
       title: 'Price',
       type: 'number',
+      validation: (Rule: any) => Rule.required().min(0),
     }),
     defineField({
       name: 'oldPrice',
@@ -30,21 +38,13 @@ export default defineType({
       type: 'number',
     }),
     defineField({
-      name: 'rating',
-      title: 'Rating',
-      type: 'number',
-      validation: (Rule) => Rule.min(0).max(5),
-    }),
-    defineField({
-      name: 'reviews',
-      title: 'Number of Reviews',
-      type: 'number',
-    }),
-    defineField({
       name: 'image',
       title: 'Image',
       type: 'image',
-      options: { hotspot: true },
+      options: {
+        hotspot: true,
+      },
+      validation: (Rule: any) => Rule.required(),
     }),
     defineField({
       name: 'category',
@@ -59,13 +59,21 @@ export default defineType({
     }),
     defineField({
       name: 'isNew',
-      title: 'Is New?',
+      title: 'Is New',
       type: 'boolean',
+      initialValue: false,
     }),
     defineField({
-      name: 'discount',
-      title: 'Discount',
+      name: 'stockQuantity',
+      title: 'Stock Quantity',
       type: 'number',
-    })
+      validation: (Rule: any) => Rule.required().min(0),
+    }),
   ],
+  preview: {
+    select: {
+      title: 'name',
+      media: 'image',
+    },
+  },
 })

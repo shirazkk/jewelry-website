@@ -8,129 +8,12 @@ import { useState } from "react"
 
 interface ProductCardProps {
   product: Product
-  viewMode?: "grid" | "list"
 }
 
-export default function ProductCard({ product, viewMode = "grid" }: ProductCardProps) {
+export default function ProductCard({ product }: ProductCardProps) {
   const { addToCart } = useCart()
   const [isWishlisted, setIsWishlisted] = useState(false)
   const [imageLoaded, setImageLoaded] = useState(false)
-
-  if (viewMode === "list") {
-    return (
-      <div className="group bg-white rounded-2xl shadow-sm hover:shadow-lg transition-shadow duration-300 overflow-hidden border border-gray-100 hover:border-amber-200">
-        <div className="flex flex-col md:flex-row">
-          {/* Image Section */}
-          <div className="relative w-full md:w-80 h-64 md:h-56 overflow-hidden bg-gradient-to-br from-amber-50 to-gray-50">
-            <Image
-              src={product.image || "/placeholder.svg"}
-              alt={product.name}
-              fill
-              className={`object-cover p-4 transition-opacity duration-300 ${
-                imageLoaded ? "opacity-100" : "opacity-0"
-              }`}
-              onLoad={() => setImageLoaded(true)}
-            />
-
-            {!imageLoaded && (
-              <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-pulse" />
-            )}
-
-            {/* Badges */}
-            <div className="absolute top-3 left-3 flex flex-col gap-2 z-10">
-              {product.isNew && (
-                <div className="bg-gradient-to-r from-green-500 to-green-600 text-white text-xs px-3 py-1.5 rounded-full font-semibold shadow-lg flex items-center">
-                  <Sparkles className="w-3 h-3 mr-1" />
-                  NEW
-                </div>
-              )}
-              {product.discount != null && product.discount > 0 && (
-                <div className="bg-gradient-to-r from-red-500 to-red-600 text-white text-xs px-3 py-1.5 rounded-full font-semibold shadow-lg">
-                  -{product.discount}% OFF
-                </div>
-              )}
-            </div>
-
-            {/* Wishlist Button */}
-            <button
-              onClick={() => setIsWishlisted(!isWishlisted)}
-              className="absolute top-3 right-3 p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-colors duration-200 z-10"
-            >
-              <Heart
-                className={`w-4 h-4 transition-colors ${
-                  isWishlisted ? "fill-red-500 text-red-500" : "text-gray-600 hover:text-red-500"
-                }`}
-              />
-            </button>
-          </div>
-
-          {/* Content Section */}
-          <div className="flex-1 p-6 flex flex-col justify-between">
-            <div className="space-y-4">
-              {/* Category & Brand */}
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-amber-600 uppercase tracking-wider bg-amber-50 px-2 py-1 rounded-full">
-                  {product.category}
-                </span>
-                {product.tag === "Best_selling" && (
-                  <div className="flex items-center text-xs text-amber-600 font-medium">
-                    <Award className="w-3 h-3 mr-1" />
-                    Best Seller
-                  </div>
-                )}
-              </div>
-
-              {/* Product Name */}
-              <Link href={`/product/${product.slug.current}`}>
-                <h3 className="font-serif text-xl font-semibold text-gray-900 hover:text-amber-600 transition-colors duration-200 line-clamp-2 leading-tight">
-                  {product.name}
-                </h3>
-              </Link>
-
-        
-              {/* Price Section */}
-              <div className="space-y-2">
-                <div className="flex items-center space-x-3">
-                  {product.oldPrice && (
-                    <span className="text-lg text-gray-400 line-through font-medium">
-                      Rs.{product.oldPrice.toLocaleString()}
-                    </span>
-                  )}
-                  <span className="font-bold text-2xl text-gray-900">Rs.{product.price.toLocaleString()}</span>
-                  {product.discount && product.discount > 0 && (
-                    <div className="bg-green-100 text-green-800 text-sm px-3 py-1 rounded-full font-semibold">
-                      Save {product.discount}%
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex items-center space-x-3 pt-4">
-              <Link
-                href={`/product/${product.slug.current}`}
-                className="flex items-center justify-center px-6 py-3 border-2 border-amber-600 text-amber-600 text-sm font-semibold rounded-xl hover:bg-amber-50 transition-colors duration-200"
-              >
-                <Eye className="w-4 h-4 mr-2" />
-                View Details
-              </Link>
-              <button
-                onClick={() => addToCart(product, 1)}
-                disabled={product.stockQuantity === 0}
-                className={`flex-1 flex items-center justify-center px-6 py-3 text-white text-sm font-semibold rounded-xl transition-colors duration-200 ${
-                  product.stockQuantity === 0 ? "bg-gray-400 cursor-not-allowed" : "bg-amber-600 hover:bg-amber-700"
-                }`}
-              >
-                <ShoppingCart className="w-4 h-4 mr-2" />
-                {product.stockQuantity === 0 ? "Out of Stock" : "Add to Cart"}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
 
   return (
     <div className="group relative bg-white rounded-2xl shadow-sm hover:shadow-lg transition-shadow duration-300 overflow-hidden border border-gray-100 hover:border-amber-200">
@@ -241,7 +124,6 @@ export default function ProductCard({ product, viewMode = "grid" }: ProductCardP
           </h3>
         </Link>
 
-      
 
         {/* Price Section */}
         <div className="space-y-2">

@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   ChevronRight,
-  Star,
   Truck,
   Shield,
   RotateCcw,
@@ -15,7 +14,7 @@ import {
   Plus,
   Share2,
 } from "lucide-react";
-import type { Product } from "@/lib/products";
+import type { Product } from "@/types/products";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -167,58 +166,53 @@ export default function ProductDetailsClient({
               </Badge>
             )}
 
-            {/* Enhanced Title and Rating */}
+            {/* Enhanced Title */}
             <div className="space-y-4">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif text-gray-900 leading-tight">
                 {product.name}
               </h1>
-
-              <div className="flex items-center space-x-6">
-                <div className="flex items-center">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`w-6 h-6 ${
-                        i < (product.rating ?? 5)
-                          ? "fill-amber-400 text-amber-400"
-                          : "fill-gray-200 text-gray-200"
-                      }`}
-                    />
-                  ))}
-                </div>
-                <span className="text-sm text-gray-600 font-medium">
-                  ({product.reviews} reviews)
-                </span>
-                <button className="text-sm text-amber-600 hover:text-amber-700 font-medium">
-                  Write a review
-                </button>
-              </div>
             </div>
 
             {/* Enhanced Pricing */}
-            <div className="space-y-3">
+            <div className="space-y-4">
               <div className="flex items-center space-x-4">
                 <span className="text-4xl md:text-5xl font-bold text-gray-900">
                   Rs.{product.price.toLocaleString()}
                 </span>
-                {product.oldPrice && (
+                {product.oldPrice && product.oldPrice > product.price && (
                   <span className="text-2xl text-gray-500 line-through">
                     Rs.{product.oldPrice.toLocaleString()}
                   </span>
                 )}
               </div>
-              {product.discount && (
+              {product.oldPrice && product.oldPrice > product.price && (
                 <div className="flex items-center space-x-3">
                   <Badge className="bg-green-100 text-green-800 font-semibold px-3 py-1">
                     Save Rs.
-                    {(product.oldPrice! - product.price).toLocaleString()} (
-                    {product.discount}% off)
+                    {(product.oldPrice - product.price).toLocaleString()} (
+                    {Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100)}% off)
                   </Badge>
                   <span className="text-sm text-gray-500">
                     Limited time offer
                   </span>
                 </div>
               )}
+              {/* Stock Status */}
+              <div className="mt-4">
+                {product.stockQuantity > 0 ? (
+                  <div className="flex items-center space-x-2">
+                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                    <span className="text-green-700 font-medium">
+                      In Stock ({product.stockQuantity} available)
+                    </span>
+                  </div>
+                ) : (
+                  <div className="flex items-center space-x-2">
+                    <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                    <span className="text-red-700 font-medium">Out of Stock</span>
+                  </div>
+                )}
+              </div>
             </div>
 
             <Separator className="my-8" />
@@ -245,6 +239,7 @@ export default function ProductDetailsClient({
                     <button
                       onClick={incrementQuantity}
                       className="p-3 hover:bg-gray-50 transition-colors"
+                      disabled={quantity >= product.stockQuantity}
                     >
                       <Plus className="w-4 h-4" />
                     </button>
@@ -253,10 +248,13 @@ export default function ProductDetailsClient({
               </div>
 
               {/* Action Buttons */}
-              <div className="space-y-4 pt-4">
+              <div className="space-y-3">
                 <div className="flex flex-col gap-3">
-                  <AddToCartButton product={product} quantity={quantity} />
-
+                  <AddToCartButton 
+                    product={product} 
+                    quantity={quantity}
+                    disabled={product.stockQuantity === 0}
+                  />
                   <Button
                     size="lg"
                     variant="outline"
@@ -281,6 +279,7 @@ export default function ProductDetailsClient({
                 </Button>
               </div>
             </div>
+
             {/* Enhanced Trust Indicators */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-8 border-t border-gray-100">
               <div className="flex flex-col items-center text-center p-4 bg-green-50 rounded-xl border border-green-100">
@@ -324,7 +323,7 @@ export default function ProductDetailsClient({
       <section className="py-16 px-4 md:px-6 bg-gradient-to-b from-amber-50 to-white">
         <div className="max-w-7xl mx-auto">
           <Tabs defaultValue="description" className="w-full">
-            <TabsList className="grid w-full grid-cols-4 lg:w-[500px] h-14 bg-white border border-gray-200 rounded-xl">
+            <TabsList className="grid w-full grid-cols-3 lg:w-[500px] h-14 bg-white border border-gray-200 rounded-xl">
               <TabsTrigger value="description" className="font-medium text-sm">
                 Description
               </TabsTrigger>
@@ -333,9 +332,6 @@ export default function ProductDetailsClient({
                 className="font-medium text-sm"
               >
                 Specifications
-              </TabsTrigger>
-              <TabsTrigger value="reviews" className="font-medium text-sm">
-                Reviews
               </TabsTrigger>
               <TabsTrigger value="shipping" className="font-medium text-sm">
                 Shipping
@@ -374,7 +370,7 @@ export default function ProductDetailsClient({
                         key={index}
                         className="text-gray-700 flex items-start"
                       >
-                        <Star className="w-5 h-5 text-amber-400 mr-3 mt-0.5 flex-shrink-0" />
+                        <Award className="w-5 h-5 text-amber-400 mr-3 mt-0.5 flex-shrink-0" />
                         {feature}
                       </li>
                     ))}
@@ -440,54 +436,6 @@ export default function ProductDetailsClient({
                       <span className="text-gray-700">Excellent</span>
                     </div>
                   </div>
-                </div>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="reviews" className="mt-8">
-              <div className="bg-white rounded-2xl p-10 shadow-lg border border-gray-100">
-                <div className="flex items-center justify-between mb-8">
-                  <div className="flex items-center">
-                    <Star className="w-6 h-6 text-amber-600 mr-3" />
-                    <h3 className="text-2xl font-serif text-gray-900">
-                      Customer Reviews
-                    </h3>
-                  </div>
-                  <Button className="bg-amber-600 hover:bg-amber-700">
-                    Write a Review
-                  </Button>
-                </div>
-
-                <div className="space-y-8">
-                  {[1, 2, 3].map((review) => (
-                    <div
-                      key={review}
-                      className="border-b border-gray-100 pb-8 last:border-b-0"
-                    >
-                      <div className="flex items-center space-x-4 mb-4">
-                        <div className="flex">
-                          {[...Array(5)].map((_, i) => (
-                            <Star
-                              key={i}
-                              className="w-5 h-5 fill-amber-400 text-amber-400"
-                            />
-                          ))}
-                        </div>
-                        <span className="font-semibold text-gray-900">
-                          Sarah M.
-                        </span>
-                        <span className="text-sm text-gray-500">
-                          Verified Purchase • 1 week ago
-                        </span>
-                      </div>
-                      <p className="text-gray-700 leading-relaxed text-lg">
-                        Absolutely stunning piece! The craftsmanship is
-                        exceptional and it arrived beautifully packaged. The
-                        quality exceeded my expectations and I&apos;ve received
-                        so many compliments. Worth every penny!
-                      </p>
-                    </div>
-                  ))}
                 </div>
               </div>
             </TabsContent>
@@ -594,9 +542,9 @@ export default function ProductDetailsClient({
                         New
                       </Badge>
                     )}
-                    {rp.discount && (
+                    {rp.oldPrice && rp.oldPrice > rp.price && (
                       <Badge className="absolute top-4 right-4 bg-red-600 text-white text-xs font-medium px-3 py-1">
-                        {rp.discount}% Off
+                        {Math.round(((rp.oldPrice - rp.price) / rp.oldPrice) * 100)}% Off
                       </Badge>
                     )}
                   </div>
@@ -607,7 +555,7 @@ export default function ProductDetailsClient({
                     <span className="text-gray-900 font-bold text-lg">
                       Rs.{rp.price.toLocaleString()}
                     </span>
-                    {rp.oldPrice && (
+                    {rp.oldPrice && rp.oldPrice > rp.price && (
                       <span className="text-gray-500 text-sm line-through">
                         Rs.{rp.oldPrice.toLocaleString()}
                       </span>

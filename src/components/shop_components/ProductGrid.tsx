@@ -1,6 +1,6 @@
 "use client"
 import { useState } from "react"
-import type { Product } from "@/lib/products"
+import type { Product } from "@/types/products"
 import ProductCard from "./ProductCard"
 import { Filter, SortAsc, X, Grid, List } from "lucide-react"
 
