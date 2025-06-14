@@ -12,6 +12,8 @@ import { Banknote } from "lucide-react";
 import { RadioGroupItem } from "@radix-ui/react-radio-group";
 import { RadioGroup } from "@/components/ui/radio-group";
 import Image from "next/image";
+import { sendOrderConfirmationEmail, sendAdminNotificationEmail } from "@/lib/emailjs";
+import { toast } from "sonner";
 
 export default function CheckoutPage() {
   const { cart, cartTotal, clearCart } = useCart();
@@ -42,15 +44,48 @@ export default function CheckoutPage() {
     setIsLoading(true);
 
     try {
-      // Here you would typically send the order to your backend
-      // For now, we'll just simulate a successful order
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Generate a unique order number
+      const orderNumber = `ORD-${Date.now()}`;
+      const orderDate = new Date().toLocaleDateString();
 
-      // Clear the cart and redirect to success page
-      router.push("/checkout/success");
+      // Prepare email data
+      const emailData = {
+        orderNumber,
+        orderDate,
+        ...formData,
+        items: cart.map(item => ({
+          name: item.name,
+          quantity: item.quantity,
+          price: item.price
+        })),
+        totalAmount: cartTotal
+      };
+
+      // Clear the cart and redirect to success page first
       clearCart();
+      router.push("/checkout/success");
+      toast.success("Order placed successfully!");
+
+      // Try to send emails in the background
+      try {
+        // Send customer confirmation first
+        await sendOrderConfirmationEmail(emailData);
+        console.log('Customer confirmation email sent successfully');
+        
+        // Then send admin notification
+        await sendAdminNotificationEmail(emailData);
+        console.log('Admin notification email sent successfully');
+        
+        toast.success("Order confirmation email sent!");
+      } catch (emailError) {
+        console.error("Error sending emails:", emailError);
+        // Don't show error to user since order was successful
+        // Just log it for debugging
+        console.log("Email service temporarily unavailable. Order details:", emailData);
+      }
     } catch (error) {
       console.error("Error placing order:", error);
+      toast.error("Failed to place order. Please try again.");
     } finally {
       setIsLoading(false);
     }

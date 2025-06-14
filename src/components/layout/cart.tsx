@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { ShoppingBag, X } from "lucide-react";
 import {
   Sheet,
@@ -22,7 +21,8 @@ interface CartProps {
 }
 
 export default function Cart({ isMobile = false }: CartProps) {
-  const { cart, itemCount, cartTotal, removeFromCart, updateQuantity } = useCart();
+  const { cart, itemCount, cartTotal, removeFromCart, updateQuantity } =
+    useCart();
   const router = useRouter();
   const [open, setOpen] = useState(false);
 
@@ -40,11 +40,6 @@ export default function Cart({ isMobile = false }: CartProps) {
           <>
             <ShoppingBag className="w-5 h-5 mr-3" />
             <span>Cart ({itemCount})</span>
-            {itemCount > 0 && (
-              <span className="absolute -top-2 -right-2 bg-amber-600 text-white rounded-full h-5 w-5 flex items-center justify-center text-xs font-medium">
-                {itemCount}
-              </span>
-            )}
           </>
         ) : (
           <>
@@ -57,7 +52,7 @@ export default function Cart({ isMobile = false }: CartProps) {
           </>
         )}
       </SheetTrigger>
-      <SheetContent className="flex flex-col w-full sm:max-w-lg">
+      <SheetContent>
         <SheetHeader className="text-left">
           <SheetTitle className="flex items-center">
             <ShoppingBag className="w-5 h-5 mr-2" />
@@ -77,9 +72,9 @@ export default function Cart({ isMobile = false }: CartProps) {
             <p className="text-gray-500 mb-6">
               Add some beautiful jewelry to get started
             </p>
-            <Button 
+            <Button
               className="bg-amber-600 hover:bg-amber-700"
-              onClick={() => handleNavigation('/shop')}
+              onClick={() => handleNavigation("/shop")}
             >
               Continue Shopping
             </Button>
@@ -110,6 +105,7 @@ export default function Cart({ isMobile = false }: CartProps) {
                   </div>
                   <div className="flex items-center space-x-2">
                     <Button
+                      key={`decrease-${item.slug.current}`}
                       variant="outline"
                       size="sm"
                       onClick={() =>
@@ -126,6 +122,7 @@ export default function Cart({ isMobile = false }: CartProps) {
                       {item.quantity}
                     </span>
                     <Button
+                      key={`increase-${item.slug.current}`}
                       variant="outline"
                       size="sm"
                       onClick={() =>
@@ -136,6 +133,7 @@ export default function Cart({ isMobile = false }: CartProps) {
                       +
                     </Button>
                     <Button
+                      key={`remove-${item.slug.current}`}
                       variant="ghost"
                       size="sm"
                       onClick={() => removeFromCart(item.slug.current)}
@@ -147,22 +145,22 @@ export default function Cart({ isMobile = false }: CartProps) {
                 </div>
               ))}
             </div>
-            <div className="border-t pt-4 space-y-4">
+            <div className="mt-6 space-y-4">
               <div className="flex justify-between items-center text-lg font-semibold">
                 <span>Total:</span>
                 <span>Rs.{cartTotal.toLocaleString()}</span>
               </div>
               <div className="space-y-2">
-                <Button 
+                <Button
                   className="w-full bg-amber-600 hover:bg-amber-700"
-                  onClick={() => handleNavigation('/checkout')}
+                  onClick={() => handleNavigation("/checkout")}
                 >
                   Proceed to Checkout
                 </Button>
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="w-full"
-                  onClick={() => handleNavigation('/cart')}
+                  onClick={() => handleNavigation("/cart")}
                 >
                   View Full Cart
                 </Button>

@@ -5,6 +5,7 @@ import { CartProvider } from '@/lib/cart-context';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Top_Nav from '@/components/top_nav';
+import { Toaster } from 'sonner';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const cormorant = Cormorant_Garamond({ 
@@ -37,6 +38,7 @@ export default function RootLayout({
           <main>{children}</main>
         </CartProvider>
         <Footer />
+        <Toaster position="top-center" />
       </body>
     </html>
   );

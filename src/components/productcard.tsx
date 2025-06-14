@@ -1,19 +1,27 @@
-"use client"
-import { useCart } from "@/lib/cart-context"
-import type { Product } from "@/types/products"
-import { Star, ShoppingCart, Eye, Heart, Sparkles, Award, Clock } from "lucide-react"
-import Image from "next/image"
-import Link from "next/link"
-import { useState } from "react"
+"use client";
+import { useCart } from "@/lib/cart-context";
+import type { Product } from "@/types/products";
+import {
+  Star,
+  ShoppingCart,
+  Eye,
+  Heart,
+  Sparkles,
+  Award,
+  Clock,
+} from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
 
 interface ProductCardProps {
-  product: Product
+  product: Product;
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
-  const { addToCart } = useCart()
-  const [isWishlisted, setIsWishlisted] = useState(false)
-  const [imageLoaded, setImageLoaded] = useState(false)
+  const { addToCart } = useCart();
+  const [isWishlisted, setIsWishlisted] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   return (
     <div className="group relative bg-white rounded-2xl shadow-sm hover:shadow-lg transition-shadow duration-300 overflow-hidden border border-gray-100 hover:border-amber-200">
@@ -65,21 +73,25 @@ export default function ProductCard({ product }: ProductCardProps) {
         >
           <Heart
             className={`w-4 h-4 transition-colors ${
-              isWishlisted ? "fill-red-500 text-red-500" : "text-gray-600 hover:text-red-500"
+              isWishlisted
+                ? "fill-red-500 text-red-500"
+                : "text-gray-600 hover:text-red-500"
             }`}
           />
         </button>
 
         {/* Stock Status Indicator */}
-        {product.stockQuantity && product.stockQuantity <= 5 && product.stockQuantity > 0 && (
-          <div className="absolute bottom-3 left-3 bg-orange-500 text-white text-xs px-2 py-1 rounded-full font-medium flex items-center">
-            <Clock className="w-3 h-3 mr-1" />
-            Only {product.stockQuantity} left
-          </div>
-        )}
+        {product.stockQuantity &&
+          product.stockQuantity <= 5 &&
+          product.stockQuantity > 0 && (
+            <div className="absolute bottom-3 left-3 bg-orange-500 text-white text-xs px-2 py-1 rounded-full font-medium flex items-center">
+              <Clock className="w-3 h-3 mr-1" />
+              Only {product.stockQuantity} left
+            </div>
+          )}
 
         {/* Quick Actions Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <div className="lg:block hidden absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <div className="absolute bottom-4 left-4 right-4 flex justify-center space-x-3">
             <Link
               href={`/product/${product.slug.current}`}
@@ -88,16 +100,6 @@ export default function ProductCard({ product }: ProductCardProps) {
               <Eye className="w-4 h-4 mr-2" />
               Quick View
             </Link>
-            <button
-              onClick={() => addToCart(product, 1)}
-              disabled={product.stockQuantity === 0}
-              className={`flex items-center px-4 py-2.5 text-white text-sm font-medium rounded-lg transition-colors duration-200 ${
-                product.stockQuantity === 0 ? "bg-gray-500 cursor-not-allowed" : "bg-amber-600 hover:bg-amber-700"
-              }`}
-            >
-              <ShoppingCart className="w-4 h-4 mr-2" />
-              {product.stockQuantity === 0 ? "Out of Stock" : "Add to Cart"}
-            </button>
           </div>
         </div>
       </div>
@@ -124,7 +126,6 @@ export default function ProductCard({ product }: ProductCardProps) {
           </h3>
         </Link>
 
-
         {/* Price Section */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
@@ -134,7 +135,9 @@ export default function ProductCard({ product }: ProductCardProps) {
                   Rs.{product.oldPrice.toLocaleString()}
                 </span>
               )}
-              <span className="font-bold text-xl text-gray-900">Rs.{product.price.toLocaleString()}</span>
+              <span className="font-bold text-xl text-gray-900">
+                Rs.{product.price.toLocaleString()}
+              </span>
             </div>
             {product.discount && product.discount > 0 && (
               <div className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full font-semibold">
@@ -160,18 +163,8 @@ export default function ProductCard({ product }: ProductCardProps) {
             <Eye className="w-4 h-4 mr-2" />
             View Details
           </Link>
-          <button
-            onClick={() => addToCart(product, 1)}
-            disabled={product.stockQuantity === 0}
-            className={`flex-1 flex items-center justify-center px-4 py-3 text-white text-sm font-semibold rounded-xl transition-colors duration-200 ${
-              product.stockQuantity === 0 ? "bg-gray-400 cursor-not-allowed" : "bg-amber-600 hover:bg-amber-700"
-            }`}
-          >
-            <ShoppingCart className="w-4 h-4 mr-2" />
-            {product.stockQuantity === 0 ? "Out of Stock" : "Add to Cart"}
-          </button>
         </div>
       </div>
     </div>
-  )
+  );
 }

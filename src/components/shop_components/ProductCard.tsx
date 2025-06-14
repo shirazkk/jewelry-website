@@ -115,16 +115,6 @@ export default function ProductCard({ product, viewMode = "grid" }: ProductCardP
                 <Eye className="w-4 h-4 mr-2" />
                 View Details
               </Link>
-              <button
-                onClick={() => addToCart(product, 1)}
-                disabled={product.stockQuantity === 0}
-                className={`flex-1 flex items-center justify-center px-6 py-3 text-white text-sm font-semibold rounded-xl transition-colors duration-200 ${
-                  product.stockQuantity === 0 ? "bg-gray-400 cursor-not-allowed" : "bg-amber-600 hover:bg-amber-700"
-                }`}
-              >
-                <ShoppingCart className="w-4 h-4 mr-2" />
-                {product.stockQuantity === 0 ? "Out of Stock" : "Add to Cart"}
-              </button>
             </div>
           </div>
         </div>
@@ -205,16 +195,6 @@ export default function ProductCard({ product, viewMode = "grid" }: ProductCardP
               <Eye className="w-4 h-4 mr-2" />
               Quick View
             </Link>
-            <button
-              onClick={() => addToCart(product, 1)}
-              disabled={product.stockQuantity === 0}
-              className={`flex items-center px-4 py-2.5 text-white text-sm font-medium rounded-lg transition-colors duration-200 ${
-                product.stockQuantity === 0 ? "bg-gray-500 cursor-not-allowed" : "bg-amber-600 hover:bg-amber-700"
-              }`}
-            >
-              <ShoppingCart className="w-4 h-4 mr-2" />
-              {product.stockQuantity === 0 ? "Out of Stock" : "Add to Cart"}
-            </button>
           </div>
         </div>
       </div>
@@ -278,16 +258,6 @@ export default function ProductCard({ product, viewMode = "grid" }: ProductCardP
             <Eye className="w-4 h-4 mr-2" />
             View Details
           </Link>
-          <button
-            onClick={() => addToCart(product, 1)}
-            disabled={product.stockQuantity === 0}
-            className={`flex-1 flex items-center justify-center px-4 py-3 text-white text-sm font-semibold rounded-xl transition-colors duration-200 ${
-              product.stockQuantity === 0 ? "bg-gray-400 cursor-not-allowed" : "bg-amber-600 hover:bg-amber-700"
-            }`}
-          >
-            <ShoppingCart className="w-4 h-4 mr-2" />
-            {product.stockQuantity === 0 ? "Out of Stock" : "Add to Cart"}
-          </button>
         </div>
       </div>
     </div>
