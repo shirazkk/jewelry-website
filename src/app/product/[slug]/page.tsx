@@ -11,54 +11,54 @@ interface Props {
 
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
-
-  const dynamicProductPage = `
+  
+    const dynamicProductPage = `
     *[_type == "product" && slug.current == $slug][0] {
       _id,
-      name,
+        name,
       description,
-      price,
-      oldPrice,
+        price,
+        oldPrice,
       "slug": slug.current,
       "category": category->name,
-      "image": image.asset->url,
+        "image": image.asset->url,
       "images": images[].asset->url,
       stockQuantity,
-      tag,
+        tag,
       isNew
+      }
+    `;
+
+    const product: Product = await client.fetch(dynamicProductPage, { slug });
+
+    if (!product) {
+      notFound();
     }
-  `;
-
-  const product: Product = await client.fetch(dynamicProductPage, { slug });
-
-  if (!product) {
-    notFound();
-  }
 
   // Fetch related products
   const relatedProducts = product.category
     ? await client.fetch(
-        `
+          `
         *[_type == "product" && category->name == $catTitle && slug.current != $slug][0...4] {
           _id,
-          name,
-          price,
-          oldPrice,
+            name,
+            price,
+            oldPrice,
           "slug": slug.current,
-          "image": image.asset->url,
+            "image": image.asset->url,
           stockQuantity,
           tag,
           isNew
-        }
-      `,
-        { catTitle: product.category, slug }
-      )
-    : [];
+          }
+        `,
+          { catTitle: product.category, slug }
+        )
+      : [];
 
-  return (
+    return (
     <ProductDetailsClient
       product={product}
       relatedProducts={relatedProducts}
     />
-  );
+    );
 }

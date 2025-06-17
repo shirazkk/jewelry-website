@@ -12,8 +12,8 @@ import { Banknote } from "lucide-react";
 import { RadioGroupItem } from "@radix-ui/react-radio-group";
 import { RadioGroup } from "@/components/ui/radio-group";
 import Image from "next/image";
-import { sendOrderConfirmationEmail, sendAdminNotificationEmail } from "@/lib/emailjs";
 import { toast } from "sonner";
+import { createOrder } from '@/lib/sanity';
 
 export default function CheckoutPage() {
   const { cart, cartTotal, clearCart } = useCart();
@@ -48,8 +48,8 @@ export default function CheckoutPage() {
       const orderNumber = `ORD-${Date.now()}`;
       const orderDate = new Date().toLocaleDateString();
 
-      // Prepare email data
-      const emailData = {
+      // Prepare order data
+      const orderData = {
         orderNumber,
         orderDate,
         ...formData,
@@ -61,28 +61,26 @@ export default function CheckoutPage() {
         totalAmount: cartTotal
       };
 
-      // Clear the cart and redirect to success page first
+      // Save order to Sanity
+      await createOrder(orderData);
+
+      // Send order confirmation email
+      const response = await fetch('/api/order-confirmation', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send order confirmation');
+      }
+
+      // Clear the cart and redirect to success page
       clearCart();
       router.push("/checkout/success");
       toast.success("Order placed successfully!");
-
-      // Try to send emails in the background
-      try {
-        // Send customer confirmation first
-        await sendOrderConfirmationEmail(emailData);
-        console.log('Customer confirmation email sent successfully');
-        
-        // Then send admin notification
-        await sendAdminNotificationEmail(emailData);
-        console.log('Admin notification email sent successfully');
-        
-        toast.success("Order confirmation email sent!");
-      } catch (emailError) {
-        console.error("Error sending emails:", emailError);
-        // Don't show error to user since order was successful
-        // Just log it for debugging
-        console.log("Email service temporarily unavailable. Order details:", emailData);
-      }
     } catch (error) {
       console.error("Error placing order:", error);
       toast.error("Failed to place order. Please try again.");

@@ -38,18 +38,18 @@ export default function ProductCard({ product, viewMode = "grid" }: ProductCardP
 
             {/* Badges */}
             <div className="absolute top-3 left-3 flex flex-col gap-2 z-10">
-              {product.isNew && (
+            {product.isNew && (
                 <div className="bg-gradient-to-r from-green-500 to-green-600 text-white text-xs px-3 py-1.5 rounded-full font-semibold shadow-lg flex items-center">
                   <Sparkles className="w-3 h-3 mr-1" />
-                  NEW
-                </div>
-              )}
+                NEW
+              </div>
+            )}
               {product.discount != null && product.discount > 0 && (
                 <div className="bg-gradient-to-r from-red-500 to-red-600 text-white text-xs px-3 py-1.5 rounded-full font-semibold shadow-lg">
                   -{product.discount}% OFF
-                </div>
-              )}
-            </div>
+              </div>
+            )}
+          </div>
 
             {/* Wishlist Button */}
             <button
@@ -81,11 +81,11 @@ export default function ProductCard({ product, viewMode = "grid" }: ProductCardP
               </div>
 
               {/* Product Name */}
-              <Link href={`/product/${product.slug.current}`}>
+                <Link href={`/product/${product.slug.current}`}>
                 <h3 className="font-serif text-xl font-semibold text-gray-900 hover:text-amber-600 transition-colors duration-200 line-clamp-2 leading-tight">
-                  {product.name}
-                </h3>
-              </Link>
+                    {product.name}
+                  </h3>
+                </Link>
 
         
               {/* Price Section */}
@@ -100,21 +100,21 @@ export default function ProductCard({ product, viewMode = "grid" }: ProductCardP
                   {product.discount && product.discount > 0 && (
                     <div className="bg-green-100 text-green-800 text-sm px-3 py-1 rounded-full font-semibold">
                       Save {product.discount}%
-                    </div>
+              </div>
                   )}
-                </div>
+            </div>
               </div>
             </div>
 
             {/* Action Buttons */}
             <div className="flex items-center space-x-3 pt-4">
-              <Link
-                href={`/product/${product.slug.current}`}
+                <Link
+                  href={`/product/${product.slug.current}`}
                 className="flex items-center justify-center px-6 py-3 border-2 border-amber-600 text-amber-600 text-sm font-semibold rounded-xl hover:bg-amber-50 transition-colors duration-200"
-              >
+                >
                 <Eye className="w-4 h-4 mr-2" />
                 View Details
-              </Link>
+                </Link>
             </div>
           </div>
         </div>
@@ -225,9 +225,9 @@ export default function ProductCard({ product, viewMode = "grid" }: ProductCardP
 
         {/* Price Section */}
         <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              {product.oldPrice && (
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            {product.oldPrice && (
                 <span className="text-sm text-gray-400 line-through font-medium">
                   Rs.{product.oldPrice.toLocaleString()}
                 </span>
