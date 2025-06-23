@@ -1,27 +1,32 @@
-'use client'
-import Link from "next/link"
-import { Menu, User, Home, Store, Info, Phone } from "lucide-react"
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import { Separator } from "@/components/ui/separator"
-import { Button } from "@/components/ui/button"
-import Search from "./layout/search"
-import Cart from "./layout/cart"
-import { SignInButton, SignedOut, UserButton, SignedIn } from "@clerk/nextjs"
-import { useUser } from '@clerk/nextjs'
-
+"use client";
+import Link from "next/link";
+import { Menu, User, Home, Store, Info, Phone } from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+import Search from "./layout/search";
+import Cart from "./layout/cart";
+import { SignInButton, SignedOut, UserButton, SignedIn } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 
 const navigationItems = [
   { name: "HOME", href: "/", icon: Home },
   { name: "SHOP", href: "/shop", icon: Store },
   { name: "ABOUT US", href: "/about", icon: Info },
   { name: "CONTACT", href: "/contact", icon: Phone },
-]
+];
 
 export default function Navbar() {
-  const { isLoaded, isSignedIn, user } = useUser()
-  
-  if (!isLoaded || !isSignedIn) {
-    return null
+  const { isLoaded, user } = useUser();
+
+  if (!isLoaded) {
+    return null;
   }
   return (
     <header className="sticky top-0 z-50 bg-white shadow-sm border-b border-gray-100">
@@ -32,7 +37,9 @@ export default function Navbar() {
             <Link href="/" className="flex items-center space-x-3 group">
               <div className="relative">
                 <div className="w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow">
-                  <span className="text-white font-bold text-lg lg:text-xl">GE</span>
+                  <span className="text-white font-bold text-lg lg:text-xl">
+                    GE
+                  </span>
                 </div>
                 <div className="absolute -top-1 -right-1 w-3 h-3 bg-amber-300 rounded-full animate-pulse"></div>
               </div>
@@ -40,7 +47,9 @@ export default function Navbar() {
                 <span className="font-serif text-xl lg:text-2xl text-gray-900 font-bold tracking-wide">
                   Golden Elegance
                 </span>
-                <p className="text-xs text-amber-600 tracking-widest">LUXURY JEWELRY</p>
+                <p className="text-xs text-amber-600 tracking-widest">
+                  LUXURY JEWELRY
+                </p>
               </div>
             </Link>
           </div>
@@ -69,11 +78,9 @@ export default function Navbar() {
             </div>
             <div className="flex items-center ml-2">
               <SignedOut>
-                <Button variant="ghost" size="icon" className="hover:bg-amber-50">
-                  <SignInButton mode="modal">
-                    <User className="w-5 h-5 text-gray-600 hover:text-amber-600" />
-                  </SignInButton>
-                </Button>
+                <SignInButton mode="redirect">
+                  <User className="w-5 h-5 text-gray-600 hover:text-amber-600" />
+                </SignInButton>
               </SignedOut>
               <SignedIn>
                 <UserButton />
@@ -91,22 +98,35 @@ export default function Navbar() {
             </div>
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="hover:bg-amber-50">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="hover:bg-amber-50"
+                >
                   <Menu className="w-6 h-6 text-gray-600" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-full sm:max-w-sm bg-white">
+              <SheetContent
+                side="right"
+                className="w-full sm:max-w-sm bg-white"
+              >
                 <SheetHeader className="text-left mb-8 pb-4 border-b border-gray-100">
-                  <SheetTitle className="text-xl font-serif text-gray-900">Golden Elegance</SheetTitle>
-                  <p className="text-sm text-amber-600 tracking-wide">LUXURY JEWELRY</p>
+                  <SheetTitle className="text-xl font-serif text-gray-900">
+                    Golden Elegance
+                  </SheetTitle>
+                  <p className="text-sm text-amber-600 tracking-wide">
+                    LUXURY JEWELRY
+                  </p>
                 </SheetHeader>
 
                 {/* Navigation Links */}
                 <div className="space-y-6 ">
                   <div className="space-y-1">
-                    <h3 className="ml-2 text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Navigation</h3>
+                    <h3 className="ml-2 text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+                      Navigation
+                    </h3>
                     {navigationItems.map((item) => {
-                      const IconComponent = item.icon
+                      const IconComponent = item.icon;
                       return (
                         <Link
                           key={item.name}
@@ -116,7 +136,7 @@ export default function Navbar() {
                           <IconComponent className="w-5 h-5 text-gray-400 group-hover:text-amber-500" />
                           <span className="font-medium">{item.name}</span>
                         </Link>
-                      )
+                      );
                     })}
                   </div>
 
@@ -124,20 +144,26 @@ export default function Navbar() {
 
                   {/* Account Section */}
                   <div className="space-y-1">
-                    <h3 className="ml-2 text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Account</h3>
+                    <h3 className="ml-2 text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+                      Account
+                    </h3>
                     <div className="px-3 py-3 rounded-lg hover:bg-amber-50 transition-colors">
                       <SignedOut>
-                        <SignInButton mode="modal">
+                        <SignInButton mode="redirect">
                           <div className="flex items-center space-x-3 cursor-pointer">
                             <User className="w-5 h-5 text-gray-400" />
-                            <span className="font-medium text-gray-700">Sign In</span>
+                            <span className="font-medium text-gray-700">
+                              Sign In
+                            </span>
                           </div>
                         </SignInButton>
                       </SignedOut>
                       <SignedIn>
                         <div className="flex items-center space-x-3">
                           <UserButton />
-                          <span className="font-medium text-gray-700">{user.username}</span>
+                          <span className="font-medium text-gray-700">
+                            {user?.username ?? "Account"}
+                          </span>
                         </div>
                       </SignedIn>
                     </div>
@@ -147,7 +173,9 @@ export default function Navbar() {
                 {/* Footer */}
                 <div className="absolute bottom-6 left-6 right-6">
                   <div className="text-center py-4 border-t border-gray-100">
-                    <p className="text-xs text-gray-500">© 2024 Golden Elegance. All rights reserved.</p>
+                    <p className="text-xs text-gray-500">
+                      © 2024 Golden Elegance. All rights reserved.
+                    </p>
                   </div>
                 </div>
               </SheetContent>
@@ -156,5 +184,5 @@ export default function Navbar() {
         </div>
       </nav>
     </header>
-  )
+  );
 }

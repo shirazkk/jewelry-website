@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import { Inter, Cormorant_Garamond, Abril_Fatface } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/lib/cart-context";
-import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Top_Nav from "@/components/top_nav";
 import { Toaster } from "sonner";
 import { ClerkProvider } from "@clerk/nextjs";
+import Navbar from "@/components/Navbar";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const cormorant = Cormorant_Garamond({
