@@ -6,20 +6,10 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { useDebounce } from "@/hooks/useDebounce";
+import client from "@/sanity/lib/client";
+import type { Product } from "@/types/products";
 
-interface Product {
-  _id: string;
-  name: string;
-  price: number;
-  slug: string;
-  image: string;
-}
-
-interface SearchProps {
-  isMobile?: boolean;
-}
-
-export default function Search({ isMobile = false }: SearchProps) {
+export default function Search() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState<Product[]>([]);
@@ -58,11 +48,21 @@ export default function Search({ isMobile = false }: SearchProps) {
 
       setIsLoading(true);
       try {
-        const response = await fetch(`/api/search?q=${encodeURIComponent(debouncedSearch)}`);
-        const data = await response.json();
-        setSuggestions(data.products);
+        const results = await client.fetch<Product[]>(
+          `*[_type == "product" && name match $searchQuery] {
+            _id,
+            name,
+            description,
+            price,
+            "slug": { "current": slug.current },
+            "image": image.asset->url
+          }`,
+          { searchQuery: `${debouncedSearch}*` }
+        );
+        setSuggestions(results);
       } catch (error) {
         console.error("Error fetching suggestions:", error);
+        setSuggestions([]);
       } finally {
         setIsLoading(false);
       }
@@ -121,7 +121,7 @@ export default function Search({ isMobile = false }: SearchProps) {
               {suggestions.map((product) => (
                 <Link
                   key={product._id}
-                  href={`/product/${product.slug}`}
+                  href={`/product/${product.slug.current}`}
                   className="flex items-center p-4 border border-gray-100 rounded-lg hover:bg-gray-50"
                   onClick={() => setIsSearchOpen(false)}
                 >

@@ -9,7 +9,7 @@ export default defineType({
       name: 'name',
       title: 'Name',
       type: 'string',
-      validation: (Rule: any) => Rule.required(),
+      validation: Rule => Rule.required(),
     }),
     defineField({
       name: 'slug',
@@ -19,7 +19,7 @@ export default defineType({
         source: 'name',
         maxLength: 96,
       },
-      validation: (Rule: any) => Rule.required(),
+      validation: Rule => Rule.required(),
     }),
     defineField({
       name: 'description',
@@ -30,7 +30,7 @@ export default defineType({
       name: 'price',
       title: 'Price',
       type: 'number',
-      validation: (Rule: any) => Rule.required().min(0),
+      validation: Rule => Rule.required().min(0),
     }),
     defineField({
       name: 'oldPrice',
@@ -38,13 +38,20 @@ export default defineType({
       type: 'number',
     }),
     defineField({
+      name: 'images',
+      title: 'Images',
+      type: 'array',
+      of: [{ type: 'image', options: { hotspot: true } }],
+      validation: Rule => Rule.required().min(1),
+    }),
+    defineField({
       name: 'image',
-      title: 'Image',
+      title: 'Main Image (legacy)',
       type: 'image',
       options: {
         hotspot: true,
       },
-      validation: (Rule: any) => Rule.required(),
+      hidden: true,
     }),
     defineField({
       name: 'category',
@@ -67,13 +74,13 @@ export default defineType({
       name: 'stockQuantity',
       title: 'Stock Quantity',
       type: 'number',
-      validation: (Rule: any) => Rule.required().min(0),
+      validation: Rule => Rule.required().min(0),
     }),
   ],
   preview: {
     select: {
       title: 'name',
-      media: 'image',
+      media: 'images.0',
     },
   },
 })

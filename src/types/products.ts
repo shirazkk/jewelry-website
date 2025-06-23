@@ -1,4 +1,5 @@
 export interface Product {
+  _id?: string;
   slug: {
     current: string;
   };
@@ -6,6 +7,7 @@ export interface Product {
   price: number;
   oldPrice?: number;
   image: string;
+  images?: string[];
   category: string;
   tag?: string;
   isNew?: boolean;

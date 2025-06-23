@@ -13,7 +13,7 @@ export default function SuccessPage() {
           </div>
           <h2 className="mt-4 text-3xl font-serif text-gray-900">Order Placed Successfully!</h2>
           <p className="mt-2 text-lg text-gray-600">
-            Thank you for your purchase. We'll send you an email with your order details and tracking information.
+            Thank you for your purchase. We&apos;ll send you an email with your order details and tracking information.
           </p>
           <div className="mt-8 space-y-4">
             <Link

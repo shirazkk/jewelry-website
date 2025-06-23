@@ -1,14 +1,14 @@
 import { notFound } from "next/navigation";
-import { client } from "@/sanity/lib/client";
+import  client  from "@/sanity/lib/client";
 import ProductGrid from "@/components/shop_components/ProductGrid";
 import ShopHeader from "@/components/shop_components/ShopHeader";
 
 export default async function CategoryPage({
   params,
 }: {
-  params: { category: string };
+  params: Promise<{ category: string }>;
 }) {
-  const category = params.category;
+  const category = (await params).category;
 
   // Fetch products for this category
   const productQuery = `

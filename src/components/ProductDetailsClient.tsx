@@ -33,6 +33,9 @@ export default function ProductDetailsClient({
 }: ProductDetailsClientProps) {
   const [quantity, setQuantity] = useState(1);
   const [isWishlisted, setIsWishlisted] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(
+    product.images && product.images.length > 0 ? product.images[0] : product.image || "/placeholder.svg"
+  );
 
   const incrementQuantity = () => setQuantity((prev) => prev + 1);
   const decrementQuantity = () => setQuantity((prev) => Math.max(1, prev - 1));
@@ -118,7 +121,7 @@ export default function ProductDetailsClient({
           <div className="space-y-6">
             <div className="relative aspect-square overflow-hidden rounded-3xl border-2 border-gray-100 bg-gradient-to-br from-amber-50 to-white shadow-xl">
               <Image
-                src={product.image || "/placeholder.svg"}
+                src={selectedImage}
                 alt={product.name}
                 fill
                 className="object-cover p-8 hover:scale-105 transition-transform duration-700"
@@ -138,13 +141,15 @@ export default function ProductDetailsClient({
 
             {/* Enhanced Thumbnail Grid */}
             <div className="grid grid-cols-4 gap-4">
-              {[...Array(4)].map((_, i) => (
+              {(product.images && product.images.length > 0 ? product.images : [product.image || "/placeholder.svg"]).map((img, i) => (
                 <div
                   key={i}
-                  className="relative aspect-square overflow-hidden rounded-xl border-2 border-gray-200 cursor-pointer hover:border-amber-600 transition-all duration-300 bg-gradient-to-br from-amber-50 to-white shadow-sm hover:shadow-md"
+                  className={`relative aspect-square overflow-hidden rounded-xl border-2 cursor-pointer transition-all duration-300 bg-gradient-to-br from-amber-50 to-white shadow-sm hover:shadow-md ${selectedImage === img ? "border-amber-600 ring-2 ring-amber-400" : "border-gray-200 hover:border-amber-600"}`}
+                  onClick={() => setSelectedImage(img)}
+                  aria-label={`Show image ${i + 1}`}
                 >
                   <Image
-                    src={product.image || "/placeholder.svg"}
+                    src={img}
                     alt={`${product.name} view ${i + 1}`}
                     fill
                     className="object-cover p-3 hover:scale-110 transition-transform duration-300"

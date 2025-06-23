@@ -1,6 +1,6 @@
 import ShopHeader from "@/components/shop_components/ShopHeader"
 import ProductGrid from "@/components/shop_components/ProductGrid"
-import { client } from "@/sanity/lib/client"
+import  client  from "@/sanity/lib/client"
 
 export default async function ShopPage() {
   const productQuery = `

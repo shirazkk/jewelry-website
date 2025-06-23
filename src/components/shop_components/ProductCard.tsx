@@ -1,7 +1,6 @@
 "use client"
-import { useCart } from "@/lib/cart-context"
 import type { Product } from "@/types/products"
-import { Star, ShoppingCart, Eye, Heart, Sparkles, Award, Clock } from "lucide-react"
+import { Eye, Heart, Sparkles, Award, Clock } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
@@ -12,7 +11,6 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, viewMode = "grid" }: ProductCardProps) {
-  const { addToCart } = useCart()
   const [isWishlisted, setIsWishlisted] = useState(false)
   const [imageLoaded, setImageLoaded] = useState(false)
 

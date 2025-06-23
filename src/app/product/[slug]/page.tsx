@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { client } from "@/sanity/lib/client";
+import  client  from "@/sanity/lib/client";
 import ProductDetailsClient from "@/components/ProductDetailsClient";
 import type { Product } from "@/types/products";
 
@@ -19,7 +19,7 @@ export default async function ProductPage({ params }: Props) {
       description,
         price,
         oldPrice,
-      "slug": slug.current,
+      "slug": { "current": slug.current },
       "category": category->name,
         "image": image.asset->url,
       "images": images[].asset->url,
@@ -44,7 +44,7 @@ export default async function ProductPage({ params }: Props) {
             name,
             price,
             oldPrice,
-          "slug": slug.current,
+          "slug": { "current": slug.current },
             "image": image.asset->url,
           stockQuantity,
           tag,

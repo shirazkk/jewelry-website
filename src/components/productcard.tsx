@@ -1,9 +1,6 @@
 "use client";
-import { useCart } from "@/lib/cart-context";
 import type { Product } from "@/types/products";
 import {
-  Star,
-  ShoppingCart,
   Eye,
   Heart,
   Sparkles,
@@ -19,7 +16,6 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
-  const { addToCart } = useCart();
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
 

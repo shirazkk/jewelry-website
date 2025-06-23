@@ -13,7 +13,6 @@ import { RadioGroupItem } from "@radix-ui/react-radio-group";
 import { RadioGroup } from "@/components/ui/radio-group";
 import Image from "next/image";
 import { toast } from "sonner";
-import { createOrder } from '@/lib/sanity';
 
 export default function CheckoutPage() {
   const { cart, cartTotal, clearCart } = useCart();
@@ -56,13 +55,19 @@ export default function CheckoutPage() {
         items: cart.map(item => ({
           name: item.name,
           quantity: item.quantity,
-          price: item.price
+          price: item.price,
         })),
         totalAmount: cartTotal
       };
 
-      // Save order to Sanity
-      await createOrder(orderData);
+      // Save order to Sanity via API route
+      const res = await fetch('/api/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderData),
+      });
+      const data = await res.json();
+      if (!data.success) throw new Error(data.error || 'Order creation failed');
 
       // Send order confirmation email
       const response = await fetch('/api/order-confirmation', {
@@ -79,8 +84,8 @@ export default function CheckoutPage() {
 
       // Clear the cart and redirect to success page
       clearCart();
-      router.push("/checkout/success");
       toast.success("Order placed successfully!");
+      router.push("/checkout/success");
     } catch (error) {
       console.error("Error placing order:", error);
       toast.error("Failed to place order. Please try again.");

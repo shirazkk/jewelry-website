@@ -1,8 +1,10 @@
-import { client } from "@/sanity/lib/client";
-import { Order } from "@/types/order";
+import { NextRequest, NextResponse } from "next/server";
+import  client  from "@/sanity/lib/client";
 
-export async function createOrder(orderData: Order) {
+export async function POST(request: NextRequest) {
   try {
+    const orderData = await request.json();
+
     const order = {
       _type: 'order',
       orderNumber: orderData.orderNumber,
@@ -25,9 +27,8 @@ export async function createOrder(orderData: Order) {
     };
 
     const result = await client.create(order);
-    return result;
+    return NextResponse.json({ success: true, order: result });
   } catch (error) {
-    console.error('Error creating order in Sanity:', error);
-    throw error;
+    return NextResponse.json({ success: false, error: (error as Error).message || 'Unknown error' }, { status: 500 });
   }
 } 

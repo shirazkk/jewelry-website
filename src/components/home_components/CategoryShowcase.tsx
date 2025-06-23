@@ -3,7 +3,8 @@ import Image from "next/image"
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import { ArrowRight, Loader2 } from "lucide-react"
-import { client } from "@/sanity/lib/client"
+import client from "@/sanity/lib/client"
+
 
 interface Category {
   _id: string;

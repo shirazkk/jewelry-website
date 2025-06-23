@@ -1,148 +1,75 @@
-export default {
+import { defineType, defineField } from 'sanity'
+
+const orderSchema = defineType({
   name: 'order',
   title: 'Order',
   type: 'document',
   fields: [
-    {
-      name: 'orderNumber',
-      title: 'Order Number',
+    defineField({
+      name: 'customerName',
+      title: 'Customer Name',
       type: 'string',
-      validation: (Rule: any) => Rule.required(),
-    },
-    {
-      name: 'orderDate',
-      title: 'Order Date',
-      type: 'datetime',
-      validation: (Rule: any) => Rule.required(),
-    },
-    {
-      name: 'customer',
-      title: 'Customer Information',
-      type: 'object',
-      fields: [
-        {
-          name: 'firstName',
-          title: 'First Name',
+      validation: Rule => Rule.required(),
+    }),
+    defineField({
+      name: 'customerEmail',
+      title: 'Customer Email',
           type: 'string',
-          validation: (Rule: any) => Rule.required(),
-        },
-        {
-          name: 'lastName',
-          title: 'Last Name',
+      validation: Rule => Rule.required(),
+    }),
+    defineField({
+      name: 'customerPhone',
+      title: 'Customer Phone',
           type: 'string',
-          validation: (Rule: any) => Rule.required(),
-        },
-        {
-          name: 'email',
-          title: 'Email',
-          type: 'string',
-          validation: (Rule: any) => Rule.required().email(),
-        },
-        {
-          name: 'phone',
-          title: 'Phone',
-          type: 'string',
-          validation: (Rule: any) => Rule.required(),
-        },
-      ],
-    },
-    {
-      name: 'shippingAddress',
-      title: 'Shipping Address',
-      type: 'object',
-      fields: [
-        {
+      validation: Rule => Rule.required(),
+    }),
+    defineField({
           name: 'address',
           title: 'Address',
           type: 'string',
-          validation: (Rule: any) => Rule.required(),
-        },
-        {
+      validation: Rule => Rule.required(),
+    }),
+    defineField({
           name: 'city',
           title: 'City',
           type: 'string',
-          validation: (Rule: any) => Rule.required(),
-        },
-        {
-          name: 'state',
-          title: 'State',
+      validation: Rule => Rule.required(),
+    }),
+    defineField({
+      name: 'postalCode',
+      title: 'Postal Code',
           type: 'string',
-          validation: (Rule: any) => Rule.required(),
-        },
-        {
-          name: 'zipCode',
-          title: 'ZIP Code',
-          type: 'string',
-          validation: (Rule: any) => Rule.required(),
-        },
-      ],
-    },
-    {
-      name: 'items',
-      title: 'Order Items',
+      validation: Rule => Rule.required(),
+    }),
+    defineField({
+      name: 'products',
+      title: 'Products',
       type: 'array',
-      of: [
-        {
-          type: 'object',
-          fields: [
-            {
-              name: 'name',
-              title: 'Product Name',
-              type: 'string',
-              validation: (Rule: any) => Rule.required(),
-            },
-            {
-              name: 'quantity',
-              title: 'Quantity',
-              type: 'number',
-              validation: (Rule: any) => Rule.required().min(1),
-            },
-            {
-              name: 'price',
-              title: 'Price',
-              type: 'number',
-              validation: (Rule: any) => Rule.required().min(0),
-            },
-          ],
-        },
-      ],
-      validation: (Rule: any) => Rule.required().min(1),
-    },
-    {
-      name: 'totalAmount',
-      title: 'Total Amount',
+      of: [{ type: 'string' }],
+      validation: Rule => Rule.required().min(1),
+    }),
+    defineField({
+      name: 'total',
+      title: 'Total',
       type: 'number',
-      validation: (Rule: any) => Rule.required().min(0),
-    },
-    {
+      validation: Rule => Rule.required().min(0),
+    }),
+    defineField({
       name: 'status',
-      title: 'Order Status',
+      title: 'Status',
       type: 'string',
       options: {
         list: [
           { title: 'Pending', value: 'pending' },
-          { title: 'Processing', value: 'processing' },
+          { title: 'Confirmed', value: 'confirmed' },
           { title: 'Shipped', value: 'shipped' },
           { title: 'Delivered', value: 'delivered' },
           { title: 'Cancelled', value: 'cancelled' },
         ],
       },
-      initialValue: 'pending',
-      validation: (Rule: any) => Rule.required(),
-    },
+      validation: Rule => Rule.required(),
+    }),
   ],
-  preview: {
-    select: {
-      orderNumber: 'orderNumber',
-      customerName: 'customer.firstName',
-      total: 'totalAmount',
-      status: 'status',
-    },
-    prepare({ orderNumber, customerName, total, status }: any) {
-      return {
-        title: `Order #${orderNumber}`,
-        subtitle: `${customerName} - Rs.${total} (${status})`,
-      };
-    },
-  },
-}; 
+});
+
+export default orderSchema; 

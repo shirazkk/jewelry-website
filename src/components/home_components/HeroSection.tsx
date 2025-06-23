@@ -8,13 +8,13 @@ export default function HeroSection() {
       {/* Main Hero */}
       <div className="relative h-[70vh] min-h-[600px] w-full overflow-hidden">
         <Image
-          src="/hero_section_images/hero_image4.jpg"
+          src="/hero_section_images/hero_image_2.jpg"
           alt="Elegant hands wearing luxurious rings"
           fill
           className="object-cover"
           priority
         />
-        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 bg-black/50" />
 
         <div className="absolute inset-0 flex flex-col items-center justify-center text-white px-4">
           <div className="text-center max-w-4xl">
